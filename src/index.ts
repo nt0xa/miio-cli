@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import * as miio from "miio-api";
 import yargs from "yargs";
 import chalk from "chalk";
@@ -39,9 +40,9 @@ const argv = yargs
       default: 5,
     },
   })
-  .command("$0 <call> <args>", "Execute device command", (yargs) => {
+  .command("$0 <method> <args>", "Execute device command", (yargs) => {
     yargs
-      .positional("call", {
+      .positional("method", {
         describe: `Name of device method to call. Examples: "miIO.info", "get_props", "set_props", "get_properties", etc.`,
         demandOption: true,
         type: "string",
@@ -69,10 +70,14 @@ const argv = yargs
     try {
       JSON.parse(argv.args as string);
     } catch (e) {
-      throw new Error(`Invalid args: ${e.message}`);
+      throw new Error(`Invalid method args: ${e.message}`);
     }
 
     return true;
+  })
+  .fail(function (msg) {
+    console.log(error(msg));
+    process.exit(1);
   }).argv;
 
 (async () => {
@@ -102,7 +107,7 @@ const argv = yargs
 
   try {
     const args = JSON.parse(argv.args as string);
-    const result = await device.call(argv.call as string, args, {
+    const result = await device.call(argv.method as string, args, {
       attempts: argv.attempts,
       timeout: argv.timeout * 1000,
       delay: argv.delay * 1000,

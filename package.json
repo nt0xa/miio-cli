@@ -30,13 +30,9 @@
     "miio-api": "^0.4.1",
     "yargs": "^16.2.0"
   },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "xiaomi",
-    "miio",
-    "miot",
-    "cli"
-  ]
+  "files": ["dist"],
+  "keywords": ["xiaomi", "miio", "miot", "cli"],
+  "bin": {
+    "miio-cli": "./dist/index.js"
+  }
 }
